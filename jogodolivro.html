@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo do Livro</title>
+
+    <style>
+        div input,
+        div textarea,
+        button {
+            width: 200px;
+            padding: 20px;
+            margin: 5px;
+            border: 0;
+            border-bottom: 2px solid #000;
+            box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+            border-radius: 10px;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Letra: <span id="letra"></span></h1>
+    <h1>Ganhador: <span id="ganhador"></span></h1>
+    <div id="inputs">
+        <div>
+            <input id="players" type="text" placeholder="Numero de Jogadores" onchange="addPalpite()">
+        </div>
+        <div>
+            <input id="pag" type="number" placeholder="Paginas do livro">
+        </div>
+        <div>
+            <textarea id="text" placeholder="Texto do livro"></textarea>
+        </div>
+        <div id="palpite">
+
+        </div>
+        <button onclick="start()">Submit</button>
+    </div>
+
+    <script>
+        function addPalpite() {
+            let nPalpite = parseInt(document.getElementById('players').value)
+            let palpites = document.getElementById('palpite')
+            palpites.innerHTML = ''
+            for (let i = 0; i < nPalpite; i++) {
+                let input = document.createElement("input")
+                input.id = `palpite-${i}`
+                input.placeholder = 'Insira seu palpite'
+                palpitesArray.push(input)
+                palpites.appendChild(input)
+            }
+        }
+        let palpitesArray = []
+        let possible = "abcdefghijklmnopqrstuvwxyz"
+        let letra = possible.charAt(Math.floor(Math.random() * possible.length))
+        document.getElementById('letra').innerHTML = letra
+        function start() {
+            let pag = Math.floor(Math.random() * document.getElementById('pag').value) + 1
+            let quantidade = 0
+            let frase = document.getElementById('text').value
+            for (let i = 0; i < frase.length; i++) {
+                if (frase[i] == letra) {
+                    quantidade++
+                }
+            }
+            let ganhador = 'n'
+            palpitesArray.forEach((palpite, i) => {
+                if (i == 0) {
+                    ganhador = '0'
+                } else if (Math.abs(palpitesArray[i].value - quantidade) < Math.abs(palpitesArray[i - 1].value - quantidade)) {
+                    ganhador = `${i}`
+                }
+            });
+            document.getElementById('ganhador').innerHTML = `Jogador ${parseInt(ganhador) + 1}`
+        }
+    </script>
+</body>
+
+</html>
